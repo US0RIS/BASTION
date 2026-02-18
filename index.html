@@ -266,7 +266,7 @@ const EN=[
 {w:7, hm:1.2,sm:1,  rw:12,sz:10,col:'#44ffaa',name:'Regenerator',desc:'Heals',traits:['regen'],ctr:'poison'},
 {w:10,hm:.8, sm:1.5,rw:14,sz:8, col:'#ffaadd',name:'Phase Runner',desc:'Speeds up',traits:['haste'],ctr:'sniper'},
 {w:14,hm:2,  sm:.8, rw:16,sz:12,col:'#66ccff',name:'Shielded',  desc:'Shield',traits:['shield'],ctr:'tesla'},
-{w:19,hm:4,  sm:.5, rw:25,sz:16,col:'#ff2200',name:'Behemoth',  desc:'Armor+regen',traits:['armor','regen'],ctr:'rail'},
+{w:19,hm:2.5,sm:.5, rw:25,sz:16,col:'#ff2200',name:'Behemoth',  desc:'Armor+regen',traits:['armor','regen'],ctr:'rail'},
 {w:23,hm:1.5,sm:1.6,rw:20,sz:9, col:'#ffff66',name:'Phantom',   desc:'Shield+haste',traits:['shield','haste'],ctr:'pulse'},
 {w:28,hm:6,  sm:.7, rw:40,sz:18,col:'#ff00ff',name:'Overlord',  desc:'All traits',traits:['armor','regen','shield'],ctr:'mortar'}
 ];
@@ -412,9 +412,9 @@ function startW(){
   if(boss){al.textContent='⚠ BOSS WAVE';al.className='walert boss'}
   else if(nt.length){al.textContent='NEW: '+nt.map(e=>e.name).join(', ');al.className='walert new'}
   else{al.textContent='\u00a0';al.className='walert hide'}
-  if(boss){const bi=pool[pool.length-1],bt=EN[bi];for(let i=0;i<Math.min(3+Math.floor(wave/10),10);i++){const eh=hp*bt.hm*3*(1+wave*.03);bst[bi].s=1;bst[bi].sp++;bst[bi].lw=wave;bst[bi].mh=Math.max(bst[bi].mh,eh);spQ.push(mkEn(bi,eh,sp*.7,Math.ceil(bt.rw*rS*2),hp))}}
+  if(boss){const bi=pool[pool.length-1],bt=EN[bi];const bCnt=Math.min(1+Math.floor(wave/15),8);for(let i=0;i<bCnt;i++){const eh=hp*bt.hm*2*(1+wave*.02);bst[bi].s=1;bst[bi].sp++;bst[bi].lw=wave;bst[bi].mh=Math.max(bst[bi].mh,eh);spQ.push(mkEn(bi,eh,sp*.7,Math.ceil(bt.rw*rS*2),hp))}}
   const nc=boss?Math.floor(cnt*.4):cnt;
-  for(let i=0;i<nc;i++){let ti=pool[0];if(pool.length>1){const w=pool.map(idx=>{const a=wave-EN[idx].w;return a<4?.4:a<8?.25:.12});w[0]=.08;const s=w.reduce((a,b)=>a+b);let r=Math.random()*s,c=0;for(let j=0;j<pool.length;j++){c+=w[j];if(r<c){ti=pool[j];break}}}const t=EN[ti],eh=hp*t.hm;bst[ti].s=1;bst[ti].sp++;bst[ti].lw=wave;bst[ti].mh=Math.max(bst[ti].mh,eh);spQ.push(mkEn(ti,eh,sp*t.sm,Math.ceil(t.rw*rS),hp))}
+  for(let i=0;i<nc;i++){let ti=pool[0];if(pool.length>1){const w=pool.map(idx=>{const a=wave-EN[idx].w;const base=a<4?.4:a<8?.25:.12;return idx>=7?base*.25:idx>=5?base*.5:base});w[0]=.08;const s=w.reduce((a,b)=>a+b);let r=Math.random()*s,c=0;for(let j=0;j<pool.length;j++){c+=w[j];if(r<c){ti=pool[j];break}}}const t=EN[ti],eh=hp*t.hm;bst[ti].s=1;bst[ti].sp++;bst[ti].lw=wave;bst[ti].mh=Math.max(bst[ti].mh,eh);spQ.push(mkEn(ti,eh,sp*t.sm,Math.ceil(t.rw*rS),hp))}
   spTm=0;ui();
 }
 function mkEn(ti,hp,sp,rw,bHP){const t=EN[ti],h=x=>t.traits.includes(x);return{hp,mh:hp,spd:sp,rw,pI:0,x:PATH[0].x*TL+TL/2,y:PATH[0].y*TL+TL/2,st:0,dt:0,dd:0,sz:t.sz,col:t.col,ti,ar:h('armor')?Math.max(2,bHP*.035):0,rg:h('regen')?hp*.007:0,sh:h('shield')?hp*.3:0,sm:h('shield')?hp*.3:0,hs:h('haste')?1:0,dT:0}}
